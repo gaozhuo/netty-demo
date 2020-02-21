@@ -6,9 +6,15 @@ import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
 
-public class NIOServer {
+/**
+ * 基于NIO的服务端
+ *
+ * @author gaozhuo
+ * @date 2020/2/20
+ */
+public class NioServer {
     public static void main(String[] args) throws Exception {
-        new NIOServer().start();
+        new NioServer().start();
     }
 
     public void start() throws Exception {
