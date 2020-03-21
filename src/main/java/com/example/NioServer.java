@@ -40,7 +40,16 @@ public class NioServer {
             handleAccept(selectionKey);
         } else if (selectionKey.isReadable()) {
             handleRead(selectionKey);
+        } else if (selectionKey.isWritable()) {
+            handleWrite(selectionKey);
         }
+    }
+
+    private void handleWrite(SelectionKey selectionKey) throws Exception {
+        SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+        ByteBuffer outBuffer = ByteBuffer.wrap("msg received".getBytes());
+        socketChannel.write(outBuffer);
+        selectionKey.interestOps(SelectionKey.OP_READ);
     }
 
     private void handleRead(SelectionKey selectionKey) throws Exception {
@@ -48,9 +57,10 @@ public class NioServer {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         socketChannel.read(buffer);
         System.out.println(new String(buffer.array()));
+        selectionKey.interestOps(SelectionKey.OP_WRITE);
 
-        ByteBuffer outBuffer = ByteBuffer.wrap("msg received".getBytes());
-        socketChannel.write(outBuffer);
+//        ByteBuffer outBuffer = ByteBuffer.wrap("msg received".getBytes());
+//        socketChannel.write(outBuffer);
     }
 
     private void handleAccept(SelectionKey selectionKey) throws Exception {
